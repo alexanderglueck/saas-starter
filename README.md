@@ -11,15 +11,19 @@ Spend your time developing your app instead of dealing with the taken-for-grante
 ## Offers
 
 ### Features
-- 2FA
-- Remember Browsers to skip 2FA
-- 2FA Backup Tokens
-- List active sessions
-- Destroy individual sessions
-  - Doesn't work with "Remember me" sessions
-- Logout everywhere
 - Single-DB (tenant_id) multi tenancy
 - Login / Register
+- 2FA
+  - Setup 2FA
+  - Disable 2FA
+  - Check 2FA on login
+  - Remember Browsers to skip 2FA
+  - 2FA Backup Tokens
+- Session management
+  - List active sessions
+  - Destroy individual sessions
+    - Doesn't work with "Remember me" sessions
+  - Logout everywhere
 
 ### DX
 - barryvdh/laravel-ide-helper
@@ -59,14 +63,14 @@ Spend your time developing your app instead of dealing with the taken-for-grante
 - Authentication log
 - Team management
   - Rename
-  - Add members to team
+  - Invite members to team
   - Block members
     - Prevents login / reduces seat count
 - Role management
   - Create roles
-  - Assign permissions
-  - Assign users
-- First login welcoming email
+  - Assign permissions to roles
+  - Assign users to roles
+- Welcoming email
 
 ## Gotchas
 Uses almost no styling. Basic bootstrap look. Some parts may even be completely unstyled. 
