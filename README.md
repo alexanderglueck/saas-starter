@@ -24,12 +24,15 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - Destroy individual sessions
     - Doesn't work with "Remember me" sessions
   - Logout everywhere
+- Docker support
+- GitHub Actions support
 
 ### DX
 - barryvdh/laravel-ide-helper
 - barryvdh/laravel-debugbar
 
 ## WIP
+- First time signin setup
 - 2FA Safe device management
   - view saved devices
   - remove save devices
@@ -66,6 +69,7 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - Invite members to team
   - Block members
     - Prevents login / reduces seat count
+  - User impersonation
 - Role management
   - Create roles
   - Assign permissions to roles

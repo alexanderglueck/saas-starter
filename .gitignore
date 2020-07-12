@@ -1,0 +1,19 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Custom
+/storage/tmp/db/*
+/storage/tmp/elastic/*
+.phpstorm.meta.php
+_ide_helper.php
+.blueprint

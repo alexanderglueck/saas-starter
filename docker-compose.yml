@@ -1,0 +1,68 @@
+version: '3.7'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/app
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal
+    depends_on:
+      - app
+
+  app:
+    build: .
+    depends_on:
+      - mysql
+      - redis
+      - elasticsearch
+    volumes:
+      - ./:/app
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=app
+    volumes:
+      - ./storage/tmp/db:/var/lib/mysql:cached
+
+ # websockets:
+ #   #image: webapp
+ #   build: .
+ #   volumes:
+ #     - ./:/app
+ #   command: php artisan websockets:serve
+ #   depends_on:
+ #     - redis
+ #     - mysql
+ #     - elasticsearch
+ #   ports:
+ #     - "6001:6001"
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  elasticsearch:
+    image: elasticsearch:7.5.0
+    ports:
+      - "9200:9200"
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./storage/tmp/elastic:/usr/share/elasticsearch/data
