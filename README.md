@@ -45,7 +45,7 @@ Spend your time developing your app instead of dealing with the taken-for-grante
     - With update notification
 - Account activation in app
   - Not forced on account creation (reduced friction)
-- Subscription management
+- Subscription management (Stripe)
   - Invoices
   - Create subscription
   - Swap plan
