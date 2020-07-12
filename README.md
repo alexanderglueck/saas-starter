@@ -34,7 +34,7 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - view saved devices
   - remove save devices
 
-## Planed
+## Planned
 - Profile image management
 - API Tokens
 - User settings
