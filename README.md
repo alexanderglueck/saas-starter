@@ -19,6 +19,9 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - Check 2FA on login
   - Remember Browsers to skip 2FA
   - 2FA Backup Tokens
+  - 2FA Safe device management
+    - View saved devices
+    - Remove safe devices
 - Session management
   - List active sessions
   - Destroy individual sessions
@@ -26,44 +29,50 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - Logout everywhere
 - Docker support
 - GitHub Actions support
-
-### DX
-- barryvdh/laravel-ide-helper
-- barryvdh/laravel-debugbar
-
-## WIP
-- First time signin setup
-- 2FA Safe device management
-  - view saved devices
-  - remove save devices
-
-## Planned
-- Profile image management
+- First time sign-in setup
 - API Tokens
 - User settings
   - Name
   - Email
-    - With reminder email to old address
+    - With update notification to old email address
   - Password
     - With update notification
-- Account activation in app
-  - Not forced on account creation (reduced friction)
 - Subscription management (Stripe)
   - Invoices
   - Create subscription
   - Swap plan
   - Cancel subscription
   - Update credit card
+  - SCA (Europe)
+  - Thank you for subscribing email
 - Deactivate account
   - Cancels active subscription
   - Keeps data if user decides to return
-- Delete account
-  - Cancels active subscription
-  - Anonymizes associated user data
-    - To keep relations with user crated content
 - Trial functionality
   - No card up front
 - Authentication log
+  - Login
+  - Two Factor enabled / disabled
+- Welcome email
+- Account activation in app
+  - Not forced on account creation (reduced friction)
+- Delete account
+  - Cancels active subscription
+- Account activation in app
+  - Show "Resend verification email" on profile if email is not verified
+
+### DX
+- barryvdh/laravel-ide-helper
+- barryvdh/laravel-debugbar
+
+## WIP
+
+
+## Planned
+- Profile image management
+- Delete account
+  - Anonymizes associated user data
+    - To keep relations with user crated content
 - Team management
   - Rename
   - Invite members to team
@@ -74,7 +83,6 @@ Spend your time developing your app instead of dealing with the taken-for-grante
   - Create roles
   - Assign permissions to roles
   - Assign users to roles
-- Welcoming email
 
 ## Gotchas
 Uses almost no styling. Basic bootstrap look. Some parts may even be completely unstyled. 
