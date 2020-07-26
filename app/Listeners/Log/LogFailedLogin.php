@@ -2,6 +2,7 @@
 
 namespace App\Listeners\Log;
 
+use App\Helpers\Boilerplate;
 use App\LogEntry;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Request;
@@ -11,12 +12,16 @@ class LogFailedLogin
     /**
      * Handle the event.
      *
-     * @param  Failed $event
+     * @param Failed $event
      *
      * @return void
      */
     public function handle(Failed $event)
     {
+        if ( ! config('boilerplate.log.login_failure')) {
+            return;
+        }
+
         if ( ! isset($event->user->id)) {
             return;
         }

@@ -175,6 +175,20 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Stripe Service Provider
+         */
+        App\Providers\StripeServiceProvider::class,
+
+        /*
+         * Custom Blade Directives
+         */
+        App\Providers\BladeServiceProvider::class,
+
+        /*
+         * Permission Service Provider
+         */
+        App\Providers\PermissionServiceProvider::class,
     ],
 
     /*

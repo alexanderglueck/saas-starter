@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <p>Change your team name</p>
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('setup.store') }}">
                             @csrf
 
                             <x-inputs.input type="text" name="name" :label="__('Team name')" required

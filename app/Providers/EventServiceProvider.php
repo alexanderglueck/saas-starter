@@ -3,9 +3,20 @@
 namespace App\Providers;
 
 use App\Contracts\TwoFactorListener;
+use App\Events\ProfileEmailUpdated;
+use App\Events\ProfileUpdated;
+use App\Events\SubscriptionCreated;
+use App\Events\TwoFactorDisabled;
+use App\Events\TwoFactorEnabled;
+use App\Listeners\Auth\SendEmailChangedEmail;
+use App\Listeners\Auth\SendTwoFactorDisabledEmail;
+use App\Listeners\Auth\SendTwoFactorEnabledEmail;
 use App\Listeners\EnforceTwoFactorAuth;
 use App\Listeners\Log\LogFailedLogin;
 use App\Listeners\Log\LogSuccessfulLogin;
+use App\Listeners\Log\LogTwoFactorDisabled;
+use App\Listeners\Log\LogTwoFactorEnabled;
+use App\Listeners\SendThankYouEmail;
 use App\Listeners\SendWelcomeEmail;
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Auth\Events\Failed;
@@ -38,6 +49,30 @@ class EventServiceProvider extends ServiceProvider
         ],
         Failed::class => [
             LogFailedLogin::class,
+        ],
+        \App\Events\Auth\UserRequestedActivationEmail::class => [
+            \App\Listeners\Auth\SendActivationEmail::class,
+        ],
+        \Illuminate\Auth\Events\PasswordReset::class => [
+            \App\Listeners\Auth\SendPasswordChangedEmail::class,
+        ],
+
+        \App\Events\Auth\UserChangedPassword::class => [
+            \App\Listeners\Auth\SendPasswordChangedEmail::class,
+        ],
+        TwoFactorEnabled::class => [
+            LogTwoFactorEnabled::class,
+            SendTwoFactorEnabledEmail::class
+        ],
+        TwoFactorDisabled::class => [
+            LogTwoFactorDisabled::class,
+            SendTwoFactorDisabledEmail::class
+        ],
+        ProfileEmailUpdated::class => [
+            SendEmailChangedEmail::class
+        ],
+        SubscriptionCreated::class => [
+            SendThankYouEmail::class
         ]
     ];
 

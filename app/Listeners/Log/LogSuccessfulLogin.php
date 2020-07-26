@@ -17,6 +17,10 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
+        if ( ! config('boilerplate.log.login_success')) {
+            return;
+        }
+
         $logEntry = new LogEntry();
         $logEntry->event = 'auth.succeeded';
         $logEntry->user_id = $event->user->id;

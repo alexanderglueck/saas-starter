@@ -20,9 +20,18 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('team_id');
+            $table->uuid('uuid');
+            $table->string('image')->nullable();
+            $table->string('api_token', 60)->unique()->nullable();
             $table->rememberToken();
             $table->string('tfa_shared_secret')->nullable();
             $table->timestamp('tfa_enabled_at')->nullable();
+            $table->string('stripe_id')->nullable()->index();
+            $table->string('card_brand')->nullable();
+            $table->string('card_last_four', 4)->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->boolean('admin')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('team_id')->references('id')->on('teams')

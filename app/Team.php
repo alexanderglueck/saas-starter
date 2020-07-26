@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Team extends Model
 {
@@ -13,7 +15,6 @@ class Team extends Model
      */
     protected $fillable = [
         'name',
-        'country_id',
     ];
 
     /**
@@ -24,4 +25,14 @@ class Team extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function invites()
+    {
+        return $this->hasMany(config('teamwork.invite_model'), 'team_id', 'id');
+    }
 }

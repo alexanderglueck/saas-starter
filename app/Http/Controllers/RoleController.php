@@ -2,87 +2,176 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RoleStoreRequest;
-use App\Http\Requests\RoleUpdateRequest;
 use App\Role;
+use App\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\Role\RoleStoreRequest;
+use App\Http\Requests\Role\RoleUpdateRequest;
 
 class RoleController extends Controller
 {
+    protected $accessEntity = 'roles';
+
     /**
-     * @param \Illuminate\Http\Request $request
+     * Display a listing of the resource.
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $roles = Role::all();
+        $this->can('view');
 
-        return view('role.index', compact('roles'));
+        return view('role.index', [
+            'roles' => Role::paginate(10)
+        ]);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * Show the form for creating a new resource.
+     *
+     * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
-        return view('role.create');
+        $this->can('create');
+
+        return view('role.create', [
+            'permissions' => Permission::all(),
+            'users' => $request->user()->currentTeam->users,
+            'role' => new Role
+        ]);
     }
 
     /**
-     * @param \App\Http\Requests\RoleStoreRequest $request
+     * Store a newly created resource in storage.
+     *
+     * @param RoleStoreRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(RoleStoreRequest $request)
     {
-        $role = Role::create($request->all());
+        $role = new Role();
+        $role->fill($request->except(['permissions', 'users']));
+        $role->team_id = $request->user()->currentTeam->id;
 
-        $request->session()->flash('role.id', $role->id);
+        if ($role->save()) {
+            $role->syncPermissions($request->permissions);
 
-        return redirect()->route('role.index');
+            $role->syncUsers($request->users);
+
+            Session::flash('alert-success', trans('flash_message.role.created'));
+
+            return redirect()->route('roles.show', [$role->slug]);
+        } else {
+            Session::flash('alert-danger', trans('flash_message.role.not_created'));
+
+            return redirect()->route('roles.create');
+        }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * Display the specified resource.
+     *
      * @param \App\Role $role
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Role $role)
+    public function show(Role $role)
     {
-        return view('role.show', compact('role'));
+        $this->can('view');
+
+        return view('role.show', [
+            'role' => $role
+        ]);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * Show the form for editing the specified resource.
+     *
+     * @param Request          $request
      * @param \App\Role $role
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Role $role)
     {
-        return view('role.edit', compact('role'));
+        $this->can('edit');
+
+        return view('role.edit', [
+            'role' => $role,
+            'createButtonText' => trans('ui.edit_role'),
+            'users' => $request->user()->currentTeam->users,
+            'permissions' => Permission::all()
+        ]);
     }
 
     /**
-     * @param \App\Http\Requests\RoleUpdateRequest $request
-     * @param \App\Role $role
+     * Update the specified resource in storage.
+     *
+     * @param RoleUpdateRequest $request
+     * @param \App\Role  $role
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(RoleUpdateRequest $request, Role $role)
     {
-        $request->session()->flash('role.id', $role->id);
+        $role->fill($request->except(['users', 'permissions']));
 
-        return redirect()->route('role.index');
+        $role->syncPermissions($request->permissions);
+
+        $role->syncUsers($request->users);
+
+        if ($role->save()) {
+            Session::flash('alert-success', trans('flash_message.role.updated'));
+
+            return redirect()->route('roles.show', [$role->slug]);
+        } else {
+            Session::flash('alert-danger', trans('flash_message.role.not_updated'));
+
+            return redirect()->route('roles.edit', [$role->slug]);
+        }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * Remove the specified resource from storage.
+     *
      * @param \App\Role $role
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(Role $role)
+    {
+        $this->can('delete');
+
+        if ($role->delete()) {
+            Session::flash('alert-success', trans('flash_message.role.deleted'));
+
+            return redirect()->route('roles.index');
+        } else {
+            Session::flash('alert-danger', trans('flash_message.role.not_deleted'));
+
+            return redirect()->route('roles.delete', [$role->slug]);
+        }
+    }
+
+    /**
+     * Show the form for deleting the specified resource.
+     *
+     * @param \App\Role $role
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Role $role)
+    public function delete(Role $role)
     {
-        $role->delete();
+        $this->can('delete');
 
-        return redirect()->route('role.index');
+        return view('role.delete', [
+            'role' => $role
+        ]);
     }
 }

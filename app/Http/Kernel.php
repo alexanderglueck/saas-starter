@@ -36,6 +36,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\Impersonate::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -59,9 +60,19 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'admin' => \App\Http\Middleware\IsAdmin::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'confirmation_token.expired' => \App\Http\Middleware\ChecksExpiredConfirmationTokens::class,
+        'auth.register' => \App\Http\Middleware\AuthenticateRegister::class,
+        'subscription.active' => \App\Http\Middleware\Subscription\RedirectIfNotActive::class,
+        'subscription.notcancelled' => \App\Http\Middleware\Subscription\RedirectIfCancelled::class,
+        'subscription.cancelled' => \App\Http\Middleware\Subscription\RedirectIfNotCancelled::class,
+        'subscription.customer' => \App\Http\Middleware\Subscription\RedirectIfNotCustomer::class,
+        'subscription.inactive' => \App\Http\Middleware\Subscription\RedirectIfNotInactive::class,
+        'subscription.team' => \App\Http\Middleware\Subscription\RedirectIfNoTeamPlan::class,
+        'subscription.owner' => \App\Http\Middleware\Subscription\RedirectIfPiggybackSubscription::class,
     ];
 }

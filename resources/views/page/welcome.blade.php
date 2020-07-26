@@ -8,12 +8,6 @@
                     <div class="card-header">Welcome</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
                         Welcome to {{ config('app.name') }}
                     </div>
                 </div>

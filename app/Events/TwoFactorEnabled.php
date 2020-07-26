@@ -3,9 +3,12 @@
 namespace App\Events;
 
 use App\User;
+use Illuminate\Queue\SerializesModels;
 
 class TwoFactorEnabled
 {
+    use SerializesModels;
+
     /**
      * The User using Two Factor Authentication.
      *

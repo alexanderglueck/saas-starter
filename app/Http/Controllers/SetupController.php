@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
 use Illuminate\Http\Request;
 
 class SetupController extends Controller
@@ -14,5 +13,16 @@ class SetupController extends Controller
         return view('setup.show', [
             'team' => $user->team
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required'
+        ]);
+
+        $request->user()->team->update($validated);
+
+        return redirect()->route('home');
     }
 }

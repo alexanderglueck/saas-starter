@@ -44,9 +44,14 @@
             </div>
         </nav>
 
+        @include('layouts.partials.alert')
+
         <main class="py-4">
             @yield('content')
         </main>
     </div>
+    @yield('js-links')
+
+    @yield('js')
 </body>
 </html>

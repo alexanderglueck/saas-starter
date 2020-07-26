@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Country;
+use App\Domain\Users\Actions\GenerateProfileImageAction;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Team;
@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -66,15 +67,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        /** @var Team $team */
         $team = Team::create([
             'name' => $data['name']
         ]);
 
-        return User::create([
+        /** @var User $user */
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'team_id' => $team->id
+            'team_id' => $team->id,
+            'trial_ends_at' => now()->addDays(10),
+            'uuid' => Str::uuid()
         ]);
+
+        /*
+         * Generate profile image
+         */
+        app(GenerateProfileImageAction::class)->execute($user);
+
+        return $user;
     }
 }
